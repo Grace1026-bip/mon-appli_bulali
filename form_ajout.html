@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}">
+	</head>
+	<body>
+		<section class="total">
+			<div class="form_img">
+				<img src="static/">
+			</div>
+			<div class="form_text">
+				<h1>Souscription d'un étudiant</h1>
+				<h3>Tapez les informations de l'étudiant :</h3>
+				<form>
+					<label for="nom">Nom de l'étudiant :</label><br/><br/>
+					<input id="nom" placeholder="Ex : Yambo"/><br/><br/>
+					<label for="postnom">Postnom de l'étudiant :</label><br/><br/>
+					<input id="postnom" placeholder="Ex: Ngolu"required/><br/><br/>
+					<label for="prénom">Prénom de l'étudiant :</label><br/><br/>
+					<input id="prénom" placeholder="Ex: Grace"required/><br/><br/>
+					<label for="file">Visage de étudiant :</label></br><br/>
+					<input accept="image/*" type="file" name="fichiers" id="fichier">
+				</form>
+			</div>
+		</section>
+		<script src="" async defer></script>
+	</body>
+</html>
