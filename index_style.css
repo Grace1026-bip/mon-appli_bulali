@@ -1,0 +1,63 @@
+body{
+	background-image: url(../images_bulali/fond.PNG);
+	color: white;
+	background-attachment: fixed;
+	width: 100%;
+}
+.logo{
+	text-align: center;
+}
+.photo_logo{
+	border-radius: 50%;
+	width: 100%;
+}
+
+.debut{
+	text-align: center;
+	color: aliceblue;
+}
+
+.tout{
+	display: flex;
+	margin: 30px;
+	width: 100%;
+}
+
+.propos{
+	text-align: center;
+	width: 30%;
+	background-color: rgba(0, 0, 0, 0.3);
+	border: 1px solid #9f59d1;
+	border-radius: 10px;
+	box-shadow: 0 0 10px #9f59d1;
+	margin: 30px;
+	padding: 30px;
+	width: 50%;
+	height: 50%;
+}
+.reconn{
+	text-align: center;
+	margin: 30px;
+	width: 30%;
+	background-color: rgba(0, 0, 0, 0.3);
+	border: 1px solid #9f59d1;
+	border-radius: 10px;
+	box-shadow: 0 0 10px #9f59d1;
+	margin: 30px;
+	padding: 30px;
+	width: 50%;
+	height: 50%;
+}
+.ajout{
+	text-align: center;
+	margin: 30px;
+	width: 30%;
+	background-color: rgba(0, 0, 0, 0.3);
+	border: 1px solid #9f59d1;
+	border-radius: 10px;
+	box-shadow: 0 0 10px #9f59d1;
+	margin: 30px;
+	padding: 30px;
+	width: 50%;
+	height: 50%;
+}
