@@ -6,21 +6,33 @@
 		<title>Bulali</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="{{url_for('static', filename='css/index_style.css')}}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}"/>
 	</head>
 	<body>
-		<header>
-			<div classe="navbarre">
-				<ul>
-					<li><a href="index.html">Accueil</a></li>
-					<li><a href="connexion-admin.html">Administrateur</a></li>
-				</ul>
-			</div>
-		</header>
-		<div classe="">
-			<h2>Bienvenue sur <strong><em>Bulali!</em></strong></h2>
-			<h3>Votre système de réconnaissance faciale sur Web</h3>
-			<p>votre appli de réconnaissance des étudiants solvables</p>
+		<div class="logo">
+			<img src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" class="photo_logo" width="300px" height="100px">
 		</div>
+		<div class="debut">
+			<h2>Bienvenue sur <strong><em>Bulali!</em></strong></h2>
+			<p>
+				<b>Votre système de réconnaissance faciale sur Web
+				<br>Sécurité, Fiabilité, Rapidité
+				<br>Quelle opération souhaitez vous réaliser?</b>
+			</p>
+		</div>
+		<section class="tout">
+			<div class="propos">
+				<h1>A propos de Bulali</h1>
+				<img class="img_propos" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+			</div>
+			<div class="reconn">
+				<h1>Réconnaissance Etudiants</h1>
+				<img class="img_reconn" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+			</div>
+			<div class="ajout">
+				<h1>Ajout d'étudiant</h1>
+				<img class="img_ajout" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+			</div>
+		</section>
 	</body>
 </html>
