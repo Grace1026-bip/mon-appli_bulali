@@ -4,6 +4,9 @@ import mysql.connector
 from datetime import datetime
 import os
 import numpy
+import pickle
+
+
 #pour charger le classificateur Haar 
 def db_connexion():
 	return mysql.connector.connect(
@@ -12,17 +15,43 @@ def db_connexion():
 		password="Gra26ce10",
 		database="data_etudiants"
 	)
+
 def connexion_table():
 	table = db_connexion()
 	cursor = table.cursor()
-	cursor.execute("SELECT * FROM etudiants")
+	result_pv = cursor.execute("SELECT id, paths_visages FROM etudiants")
+	return result_pv
 
+def encodage():
+	connus = db_connexion()
+	cursor = connexion_table()
+	for etu_id, path in cursor:
+		if not os.path.isfile(path):
+			continue
+		image = face_recognition.load_image_file(path)
+		caractere = face_recognition.face_landmarks(image)
+		encs = face_recognition.face_encodings(caractere)
+		if not encs:
+			continue
+		encs_binaire = pickle.dumps(encs[0])
+		cursor.execute("UPDATE etudiants SET encodages = %s WHERE id = %s", (encs_binaire, etu_id))
+	connus.commit()
+	cursor.close()
+	connus.close()
+
+def colonne_encodage():
+	conn = db_connexion()
+	cursor = conn.cursor()
+	result = cursor.execute("SELECT encodages FROM etudiants")
+	return result
 
 def detection_visage():
 	visage = cv.VideoCapture (0)#pour ouvrir la caméra initial
 	while(visage.isOpened()):
 		ret, frame = visage.read()
 		rgb_visage = frame[:, :, ::-1]
+		caractere = face_recognition.face_landmarks(rgb_visage)
+		encode = face_recognition.face_encodings(caractere)
 		if not ret:
 			break
 		faces = face_recognition.face_locations(rgb_visage)
@@ -33,3 +62,7 @@ def detection_visage():
 			break
 	visage.release() #pour
 	cv.destroyAllWindows() #pour detruire toute les fenêtres
+def compare_visages(): #comparaison ses visages
+	visages_encodes = colonne_encodage()
+	for (v, ) in visages_encodes:
+		if 
