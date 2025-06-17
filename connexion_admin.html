@@ -6,14 +6,35 @@
 		<title></title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    	 integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-    	 crossorigin="anonymous" referrerpolicy="no-referrer"/>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css')}}">
 	</head>
 	<body>
-		
-		
-		<script src="" async defer></script>
+		<div class="adm">
+			<div class="adm-image">
+				<p>
+					<b>
+						Cette option est réservé seulement à l'administrateur.
+					</b>
+				</p>
+			</div>
+			<div class="adm-form">
+				<h1>Connexion de l'administrateur</h1>
+				<form method="get" enctype="multipart/form-data">
+					<label for="nom">Entrez votre nom</label><br/>
+					<input id="nom" placeholder="Ex: Yambo"required/><br/><br/>
+					<label for="postnom">Entrez votre postnom</label><br/>
+					<input id="postnom" placeholder="Ex: Ngolu"required/><br/><br/>
+					<label for="prénom">Entrez votre prénom</label><br/>
+					<input id="prénom" placeholder="Ex: Grace"required/><br/><br/>
+					<label for="mail">Entrez votre adresse mail</label><br/>
+					<input type="email" id="email" placeholder="graceyambo23@gmail.com"required/><br/><br/>
+					<label for="password">Tapez votre futur mot de passe</label><br/>
+					<input type="password" id="password" name="password" placeholder="EX: zde-6544REF43e"required/>
+					<div class="juste">
+					<input type="submit" value="Envoyer les données"/>
+					<input type="reset" value="Reinitialisé"/>
+				</form>
+			</div>
+		</div>
 	</body>
 </html>
