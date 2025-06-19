@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title></title>
+		<title>Connexion administrateur</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css')}}">
@@ -12,14 +12,14 @@
 		<div class="adm">
 			<div class="adm-image">
 				<p>
-					<b>
+					<h2>
 						Cette option est réservé seulement à l'administrateur.
-					</b>
+					</h2>
 				</p>
 			</div>
 			<div class="adm-form">
-				<h1>Connexion de l'administrateur</h1>
-				<form method="get" enctype="multipart/form-data">
+				<h2>Connexion de l'administrateur</h2>
+				<form method="POST" enctype="multipart/form-data">
 					<label for="nom">Entrez votre nom</label><br/>
 					<input id="nom" placeholder="Ex: Yambo"required/><br/><br/>
 					<label for="postnom">Entrez votre postnom</label><br/>
@@ -36,5 +36,14 @@
 				</form>
 			</div>
 		</div>
+		{% with messages = get_flashed_messages()%}
+			{% if messages %}
+			  <ul style="color: red;">
+				{% for msg in messages %}
+				  <li>{{msg}}</li>
+				{% endfor %}
+			  </ul>
+		    {% endif %}
+		{% endwith %}
 	</body>
-</html>
+</html> 
