@@ -4,7 +4,6 @@ import mysql.connector
 import os
 import pickle
 
-
 #pour me conecter à ma base
 def db_connexion():
 	return mysql.connector.connect(
@@ -21,18 +20,21 @@ def encodage():
 	cursor.execute("SELECT id, paths_visages FROM etudiants")
 	for etu_id, path in cursor:
 		if not os.path.isfile(path):
+			print(f"⚠️ Image non trouvée pour ID {etu_id} : {path}")
 			continue
 		image = face_recognition.load_image_file(path)
 		encs = face_recognition.face_encodings(image)
 		if not encs:
 			continue
-		encs_binaire = pickle.dumps(encs[0])
-		cursor.execute("UPDATE etudiants SET encodages = %s WHERE id = %s", (encs_binaire, etu_id))
+		encs_bin = pickle.dumps(encs[0])
+		cursor.execute("UPDATE etudiants SET encodages = %s WHERE id = %s", (encs_bin, etu_id))
+	
 	mybd.commit()
 	cursor.close()
 	mybd.close()
+	print("✅ Encodage des visages terminé.")
 
-#recupère  tous les encodages enregistrés depuis la base de données
+#recupère tous les encodages enregistrés depuis la base de données
 def recuperer_encodages():
 	mybd = db_connexion()
 	cursor = mybd.cursor()
@@ -44,9 +46,12 @@ def recuperer_encodages():
 	Encodages = []
 	for etu_id, enc_bin in resultats:
 		if enc_bin :
-			encodage_reel = pickle.loads(enc_bin)
-			Encodages.append((etu_id, encodage_reel))
-	
+			try:
+				encodage_reel = pickle.loads(enc_bin)
+				Encodages.append((etu_id, encodage_reel))
+			except Exception as e:
+				print(f"Erreur de décodage pour l'ID {etu_id}: {e}")
+
 	return Encodages
 
 #capture d'un visage en temps réel dépuis la caméra
@@ -59,23 +64,20 @@ def detection_visage():
 		ret, frame = visage.read()
 		if not ret :
 			break
-		rgb_frame = frame[:, :, ::-1]
+		rgb_frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 		faces = face_recognition.face_locations(rgb_frame)
+		encode = face_recognition.face_encodings(rgb_frame, faces)
 
-		if faces:  # Vérifie qu'on a ben détecté un visage
-			encode = face_recognition.face_encodings(rgb_frame, faces)
+		# Vérifie qu'on a ben détecté un visage
 		for top, right, bottom, left in faces:
-			cv.rectangle(frame, (left, top), (right, bottom), (255, 0 , 0), 2)
-		else:
-			encode= []
-		
+    			cv.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
 		cv.putText(frame, "Appuyer sur g pour capturer", (10, 30), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 		cv.imshow("Capture", frame)
 
 		if cv.waitKey(1) & 0xFF == ord('g') :#permet de désactiver la caméra si l'on clique sur la lettre entrée en paraméttre
 			if encode :
 				encode_etudiant = encode[0] #prend lepremier visage détecté
-			break
+				break
 	visage.release() #pour
 	cv.destroyAllWindows() #pour detruire toute les fenêtres
 	return encode_etudiant
@@ -90,8 +92,6 @@ def compare_visages(encode_capturer): #comparaison ses visages
 		if resultat[0]:
 			return f"✅ Etudiant solvable (ID: {etu_id})"
 	return "❌Etudiant insolvable"
-		
-
 
 if __name__ == "__main__":
 	print("Lancement du processus de reconnaissance faciale")
