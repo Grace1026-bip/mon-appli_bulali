@@ -2,10 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title></title>
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Ajouter un étudiant </title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}">
 	</head>
 	<body>
@@ -14,19 +11,31 @@
 				<img src="static/">
 			</div>
 			<div class="form_ajout">
-				<h1>Souscription d'un étudiant</h1>
+				<h1>Inscription d'un étudiant</h1>
 				<h3>Tapez les informations de l'étudiant :</h3>
-				<form method="get"  enctype="multipart/form-data">
+				<form method="POST"  enctype="multipart/form-data">
 					<label for="nom">Nom de l'étudiant :</label><br/><br/>
 					<input id="nom" placeholder="Ex: Yambo"/><br/><br/>
+					
 					<label for="postnom">Postnom de l'étudiant :</label><br/><br/>
 					<input id="postnom" placeholder="Ex: Ngolu"required/><br/><br/>
+					
 					<label for="prénom">Prénom de l'étudiant :</label><br/><br/>
 					<input id="prénom" placeholder="Ex: Grace"required/><br/><br/>
+					
 					<label for="file">Visage de l'étudiant :</label></br><br/>
 					<input accept="image/*" type="file" name="fichiers" id="fichier">
 				</form>
 			</div>
 		</section>
+		 {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul style="color: green;">
+          {% for msg in messages %}
+            <li>{{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 	</body>
 </html>
