@@ -13,25 +13,37 @@
 			<img src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" class="photo_logo" width="100px" height="20px">
 		</div>
 		<div class="debut">
-			<h2>Bienvenue sur <strong><em>Bulali!</em></strong></h2>
+			<h2>Bienvenue sur <strong><em>Bulali ID!</em></strong></h2>
 			<p>
-				<b>Votre système de réconnaissance faciale sur Web
+				Votre système de réconnaissance faciale sur Web
 				<br>Sécurité, Fiabilité, Rapidité
-				<br>Quelle opération souhaitez vous réaliser?</b>
+				<br>Quelle opération souhaitez vous réaliser?
 			</p>
 		</div>
 		<section class="tout">
-			<div class="propos">
-				<h1>A propos de Bulali</h1><br>
-				<img class="img_propos" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+			<div class="apropos">
+				<a href="{{ url_for('apropos')}}" >
+					<buton>
+						<h1>A propos de Bulali</h1><br>
+						<img class="img_propos" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+					</buton>
+				</a>
 			</div>
 			<div class="reconn">
-				<h1>Réconnaissance étudiants</h1>
-				<img class="img_reconn" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+				<a href="{{ url_for('reconnaissance')}}" >
+					<buton>			
+						<h1>Réconnaissance étudiants</h1>
+						<img class="img_reconn" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+					</buton>
+				</a>
 			</div>
 			<div class="ajout">
-				<h1>Ajout d'étudiant</h1><br>
-				<img class="img_ajout" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+				<a href="{{ url_for('conn_admin')}}"> 
+					<buton>
+						<h1>Inscrire un étudiant</h1><br>
+						<img class="img_ajout" src="{{ url_for('static', filename='images_bulali/mon_logo_preferee.png')}}" width="50%">
+					</buton>
+				</a>
 			</div>
 		</section>
 	</body>
