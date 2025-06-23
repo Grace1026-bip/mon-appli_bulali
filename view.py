@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash 
 import mysql.connector
 from recon_faciale import db_connexion, recuperer_encodages, encodage, detection_visage, compare_visages
 from werkzeug.utils import secure_filename
 import os
 
-
-bulali = Flask(__name__)
+bulali= Flask(__name__)
 
 bulali.config['DEBUG'] = True
 bulali.secret_key= "123frdestj0"
@@ -14,10 +13,9 @@ allowed_extentions = {'jpg', 'jpeg'}
 
 #vérifie si une extension est valide
 def verificateur_fichier_valide(nom_file):
-	return '.' in nom_file and nom_file.rsplit('.', 1)[1].lower() in allowedextensios
+	return '.' in nom_file and nom_file.rsplit('.', 1)[1].lower() in allowed_extentions
 
 #Page d'accueil
-	
 @bulali.route("/")
 def index():
 	return render_template("index.html")
@@ -27,7 +25,7 @@ def index():
 def apropos():
 	return render_template("apropos_bulali.html")
 
-#pour la reconnaissance
+#pour la reconnaissance + le résultat
 @bulali.route("/reconnaissance")
 def reconnaissance():
 	encodage()
@@ -68,7 +66,7 @@ def new_etudiant ():
 		matricule = request.form["Matricule"]
 		fichier = request.files["Photo"]
 
-		if fichier and verificateur_fichier(fichier.filename):
+		if fichier and verificateur_fichier_valide(fichier.filename):
 			nom_file = secure_filename(matricule + ".jpg") #on nomme l'image avec le matricule
 			chemin = os.path.join(bulali.config['UPLOAD_FOLDER'], nom_file)
 			fichier.save(chemin)
@@ -87,7 +85,7 @@ def new_etudiant ():
 	return render_template("form_ajout.html")
 
 if __name__ == '__main__':
-	bulali.run()
+	bulali.run(debug=True)
 	
 
 
