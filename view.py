@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash 
-import mysql.connector
-from recon_faciale import db_connexion, recuperer_encodages, encodage, detection_visage, compare_visages
+from flask import Flask, render_template, request, redirect, url_for, flash, session 
+from recon_faciale import db_connexion, encodage, detection_visage, compare_visage
 from werkzeug.utils import secure_filename
 import os
 
@@ -15,7 +14,7 @@ allowed_extentions = {'jpg', 'jpeg'}
 def verificateur_fichier_valide(nom_file):
 	return '.' in nom_file and nom_file.rsplit('.', 1)[1].lower() in allowed_extentions
 
-#Page d'accueil
+#Page d'accueil 
 @bulali.route("/")
 def index():
 	return render_template("index.html")
@@ -30,35 +29,43 @@ def apropos():
 def reconnaissance():
 	encodage()
 	visage_capture = detection_visage()
-	resultat = compare_visages(visage_capture)
+	resultat = compare_visage(visage_capture)
 	return render_template("resultat.html", message=resultat)
 
 #la connexion de l'administrateur
-@bulali.route("/connexion_admin", methods = ['GET', 'POST'])
-def conn_admin():
-	if request.method == 'POST':
-		nom = request.form.get("Nom")
-		prenom = request.form.get("Prenom")
-		email = request.form.get("email")
-		password = request.form.get("password")
+@bulali.route("/login", methods = ['GET', 'POST'])
+def login_admin():
+	if request.method == "POST":
+		nom = request.form["Nom"]
+		postnom= request.form["Postnom"]
+		prenom = request.form["Prenom"]
+		email = request.form["email"]
+		password = request.form["password"]
 
 		conn = db_connexion()
-		cursor = conn.cursor()
-		cursor.execute("SELECT * FROM admini WHERE adm_email=%s AND adm_password=%s", (email, password))
-		admini = cursor.fetchone()
+		cursor = conn.cursor(dictionary=True)
+
+		cursor.execute("SELECT * FROM admini WHERE adm_nom =%s AND adm_postnom=%s AND adm_prenom=%s AND adm_email=%s AND adm_password=%s", (nom, postnom, prenom,email, password))
+
+		admini = cursor.fetchone() #ramène la table en dictionnaire
+
 		cursor.close()
 		conn.close()
 
 		if admini:
-			flash("Connexion réussie !")
-			return redirect(url_for("new_etudiant"))
+			session["admin_connecte"] = True
+			return redirect(url_for("ajout_etudiant"))
 		else:
-			flash("Echec de la connexion.")
+			flash("Informations incorrectes. Vérifiez bien tous les champs", "erreur!")
+			return render_template("connexion_admin.html")
 	return render_template("connexion_admin.html")
 
 #formulaire d'ajout d'un nouvel étudiant
 @bulali.route("/ajout", methods=["GET", "POST"])
-def new_etudiant ():
+def ajout_etudiant():
+	if not session.get("admin_connecte"):
+		return redirect(url_for("login_admin"))
+	
 	if request.method == "POST":
 		nom = request.form["Nom"]
 		postnom = request.form["Postnom"]
@@ -85,7 +92,7 @@ def new_etudiant ():
 	return render_template("form_ajout.html")
 
 if __name__ == '__main__':
-	bulali.run(debug=True)
+	bulali.run(debug=False)
 	
 
 
