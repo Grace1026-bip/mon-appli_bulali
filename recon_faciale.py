@@ -80,31 +80,50 @@ def recuperer_encodages():
 		
 #capture d'un visage en temps réel depuis la caméra
 def detection_visage():
-	visage = cv.VideoCapture(0)
+	capture = cv.VideoCapture(0)
 	encode_etudiant = None
-	encode =[]
 
-	while visage.isOpened():
-		ret, frame = visage.read()
+	if not capture.isOpened():
+		print("Impossible d'accéder à la caméra")
+		return None
+	
+	print("Appuyer sur 'g' pour effectuer la capture...")
+
+	while True:
+		ret, frame = capture.read()
 		if not ret :
+			print("Echec de lecture de la caméra.")
 			break
+		#pour convertir le BGR d'Opencv en RGB pour Face_recognition
 		rgb_frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+
+		#localisation du visage sur la frame convertie en rgb 
 		faces = face_recognition.face_locations(rgb_frame)
 
-		#Vérification si le visage est bien détecté
-		for top, right, bottom, left in faces:
-			cv.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
-			
-		cv.putText(rgb_frame, "Appuyer sur g pour capturer", (10,30), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 250), 2)
-		cv.imshow("Capture", rgb_frame)
+		#Dessin d'un rectangle autour du visage détecter
+		if faces:
+			for top, right, bottom, left in faces:
+				cv.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
 
-		encode = face_recognition.face_encodings(faces[0])
+		#Afficher du texte
+		cv.putText(frame, "Appuyer sur g pour capturer", (10,30), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 250), 2)
+		#Ouverture de la fenêtre
+		cv.imshow("Capture", frame)
 
-		if cv.waitKey(1) & 0xFF == ord('g'):
+		cle = cv.waitKey(1) & 0xFF
+		
+		if cle == ord('g') and faces:
+			print("✅ Visage capturé")
+			global encode
+			encode = face_recognition.face_encodings(rgb_frame, known_face_locations=faces)
 			if encode:
 				encode_etudiant = encode[0]#prend le premier visage détecté
 				break
-	visage.release()
+		elif cle == ord('g'):
+			print("Annulée")
+			break
+	
+	capture.release()
 	cv.destroyAllWindows()#pour detruire toute les fenêtres
 	return encode_etudiant
 			
@@ -117,7 +136,17 @@ def compare_visage(encode_capturer):
 		resultat = face_recognition.compare_faces([enc_reel], encode_capturer)
 		if resultat[0]:
 			return f"✅ Etudiant solvable(ID:{etu_id})"
-		return "❌Etudiant insolvable"
+		#Si après avoir visité tous les visages enregistrés et qu'aucun ne correspond à la capture on retourne que l'étudiant est insolvable
+	return "❌Etudiant insolvable"
+
+if __name__== "__main__":
+	print("Lancement du processus de reconnaissance faciale")
+	visage_capture = detection_visage()
+	resultat = compare_visage(visage_capture)
+	print(resultat)
 	
-detection_visage()
+
+
+
+
 
