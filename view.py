@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session 
 from recon_faciale import db_connexion, encodage, detection_visage, compare_visage
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash, generate_password_hash
 import os
 
 bulali= Flask(__name__)
@@ -27,10 +28,39 @@ def apropos():
 #pour la reconnaissance + le résultat
 @bulali.route("/reconnaissance")
 def reconnaissance():
-	encodage()
 	visage_capture = detection_visage()
 	resultat = compare_visage(visage_capture)
 	return render_template("resultat.html", message=resultat)
+
+#Enregistrement de l'administrateur
+@bulali.route("/enregistrement admin", methods=['GET', 'POST'])
+def enregistrement_admin():
+	if request.method == "POST":
+		nom = request.form["Nom"]
+		postnom= request.form["Postnom"]
+		prenom = request.form["Prenom"]
+		email = request.form["email"]
+		password = request.form["password"]
+		if not (nom and postnom and prenom and email and password):
+			flash("Tous les champs sont obligatoires.")
+			return render_template("login.html")
+		
+		password_hash = generate_password_hash(password)
+		mybd = db_connexion()
+		cursor = mybd.cursor(dictionary=True)
+		try:
+			cursor.execute(
+			"INSERT INTO admini (adm_nom, adm_postnom, adm_prenom, adm_email, adm_password) VALUES (%s, %s, %s, %s, %s)", 
+			(nom, postnom, prenom, email, password_hash))
+			mybd.commit()
+			print("L'enregistrement a été un ssuccès!")
+		except Exception as e:
+			print("Echec de l'enregistrement!")
+			flash("Erreur! lors de l'enregistrement.")
+		finally:
+			cursor.close()
+			mybd.close()
+	return render_template("enregistrement_admin.html")
 
 #la connexion de l'administrateur
 @bulali.route("/login", methods = ['GET', 'POST'])
@@ -40,25 +70,27 @@ def login_admin():
 		postnom= request.form["Postnom"]
 		prenom = request.form["Prenom"]
 		email = request.form["email"]
-		password = request.form["password"]
+		password_saisi = request.form["password"]
+
+		print(request.form['Nom'])
 
 		conn = db_connexion()
 		cursor = conn.cursor(dictionary=True)
 
-		cursor.execute("SELECT * FROM admini WHERE adm_nom =%s AND adm_postnom=%s AND adm_prenom=%s AND adm_email=%s AND adm_password=%s", (nom, postnom, prenom,email, password))
+		cursor.execute(
+			"SELECT * FROM admini WHERE adm_nom =%s AND adm_postnom=%s AND adm_prenom=%s AND adm_email=%s ", 
+			(nom, postnom, prenom, email))
 
 		admini = cursor.fetchone() #ramène la table en dictionnaire
-
 		cursor.close()
 		conn.close()
 
-		if admini:
+		if admini and check_password_hash(admini["adm_password"], password_saisi):
 			session["admin_connecte"] = True
 			return redirect(url_for("ajout_etudiant"))
 		else:
-			flash("Informations incorrectes. Vérifiez bien tous les champs", "erreur!")
-			return render_template("connexion_admin.html")
-	return render_template("connexion_admin.html")
+			flash("Informations incorrectes. Veuillez bien vérifier tous les champs", "erreur!")
+	return render_template("login.html")
 
 #formulaire d'ajout d'un nouvel étudiant
 @bulali.route("/ajout", methods=["GET", "POST"])
@@ -92,8 +124,6 @@ def ajout_etudiant():
 	return render_template("form_ajout.html")
 
 if __name__ == '__main__':
-	bulali.run(debug=False)
-	
+	bulali.run(debug=True)
 
 
-	
