@@ -1,18 +1,106 @@
 body{
-	display: flex;
 	background-image: url(../images_bulali/fond.PNG);
 	background-size: cover;
-	position: absolute;
+	font-family: Arial, sans-serif;
 	backdrop-filter: blur(5px);
 	background-attachment: fixed;
 	background-repeat: no-repeat;
-	min-height: 100vh;
+	min-height: 90vh;
 	width: 100%;
+	height: 100vh;
 	color: white;
-	font-family: Arial, Helvetica, sans-serif;
+	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: center; 
 }
+/* ----------------------------------------------connexion de l'administrateur------------------------------------------------------------------------ */
+.container{
+	display: flex;
+	height: 100%;
+	background-color: rgb(220, 225, 245);
+	text-align: center;
+	margin: 30px;
+	border: 1px solid #9f59d1;
+	border-radius: 20px;
+	box-shadow: 0 0 10px #9f59d1;
+	padding: 30px;
+	width: 65%;
+	height: 70%;
+	max-width: 65%;
+	min-height: 60%;
+	color: black;
+}
+.ecrits{
+	flex: 1;
+	background-image: url(../images_bulali/admin_img.PNG);
+	background-size: cover;
+	background-position: center;
+	color: rgb(220, 225, 245);
+	text-align: center;
+	padding: 30px;	
+}
+.ecrits a{
+	text-decoration: none;
+	color: #9f59d1;
+
+}
+.ecrits p{
+	padding-bottom: 500px;
+}
+.form{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 40px;
+	background-color: #ffffff;
+	box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+}
+form{
+	width: 100%;
+	max-width: 400px;
+	display: flex;
+	flex-direction: column;
+}
+input{
+	margin-bottom: 15px;
+	padding: 10px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+.btn{
+	display: flex;
+	justify-content: space-between;
+}
+.conn:hover{
+	border: 1px solid #5967d1;
+	box-shadow: 0 0 10px #444bd1;
+	background-color: black;
+	color: white;
+}
+.init:hover{
+	border: 1px solid #5967d1;
+	box-shadow: 0 0 10px #444bd1;
+	background-color: black;
+	color: white;
+}
+buton{
+	border: 2.5px solid #697df0ce;
+	box-shadow: 0 0 10px #697df0ce;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+	background-color: #6a6e85ce;
+}
+.flashes{
+	margin-top: 15px;
+	color: red;
+	list-style: none;
+	padding: 0;
+}
+/* ------------------------------------------A propos page----------------------------------------------- */
 .propos{
 	text-align: center;
 	margin: 30px;
@@ -23,14 +111,14 @@ body{
 	padding: 40px;
 	width: 50%;
 	height: 80%;
-	color: rgb(211, 208, 208);
-	
+	color: rgb(221, 231, 244);
 }
 .propos p{
 	text-align: justify;
 }
-/* -----------------------------------------------------------------------------connexion admin----------------------------------------------------------- */
-.adm{
+/* -----------------------------------------------Résultation-------------------------------------------------------- */
+.container2{
+	height: 100%;
 	background-color: rgb(220, 225, 245);
 	text-align: center;
 	margin: 30px;
@@ -40,20 +128,10 @@ body{
 	padding: 30px;
 	width: 60%;
 	height: 65%;
+	max-width: 65%;
+	min-height: 55%;
 	color: black;
 	display: flex;
-	
 }
-.adm-image{
-	background-image: url(../images_bulali/admin_img.PNG);
-	color: white;
-	width: 60%;
-}
-.juste{
-	display: block;
-	text-align: center;
-	margin: 3px;
-	padding: 5px;
-	width: 40%;
-	align-items: center;
-}
+
+
