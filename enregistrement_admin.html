@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Connexion administrateur</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/apropos.css')}}">
+	</head>
+	<body>
+		<section class="container">
+			<div class="ecrits">
+				<h2>Seul l'administrateur<br>peut rajouter un<br>étudiant.</h2>
+			</div>
+			<div class="form">
+				<h2>Enregistrement de l'administrateur</h2>
+				<form method="POST" enctype="multipart/form-data">
+					<input type="text" name="Nom" placeholder= "Entrez votre nom" required/>
+					<input type="text" name="Postnom" placeholder="Entrez votre post-nom"required/>
+					<input type="text" name="Prenom" placeholder="Entrez votre prénom"required/>
+					<input type="email" name="email" placeholder="Entrez votre email"required/>
+					<input type="password" name="password" placeholder="Entrez votre mot de passe"required/>
+					<div class="btn">
+						<input class="conn" type="submit" value="Connexion">
+						<input type="reset" value="Reinitialiser"/>
+					</div>
+				</form>		
+				{% with messages = get_flashed_messages(with_categories=true)%}
+					{% if messages %}
+						<ul class="flashes">
+						{% for category, msg in messages %}
+							<li class="{{category}}">{{msg}}</li>
+						{% endfor %}
+			  			</ul>
+		    		{% endif %}
+				{% endwith %}
+			</div>
+		</section>
+	</body>
+</html> 
